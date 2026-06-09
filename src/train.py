@@ -1,19 +1,52 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import joblib
 
-df = pd.read_csv("customer_churn_prediction_dataset.csv")
+df = pd.read_csv("data/churn.csv")
 
-print(df.head())
-print(df.shape)
-print(df.info())
-print(df.isnull().sum())
+# Remove useless ID column
+df = df.drop("customerID", axis=1)
+
+# Encode target
+df["Churn"] = df["Churn"].map({
+    "Yes": 1,
+    "No": 0
+})
+
+# Encode categorical features
+df = pd.get_dummies(df, drop_first=True)
+
+# Features and target
 X = df.drop("Churn", axis=1)
 y = df["Churn"]
 
-
+# Split
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.2,
     random_state=42
 )
+
+# Train
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+# Predict
+predictions = model.predict(X_test)
+
+# Evaluate
+accuracy = accuracy_score(y_test, predictions)
+
+print(f"Accuracy: {accuracy:.4f}")
+
+# Save model
+joblib.dump(model, "models/model.pkl")
+print(df["Churn"].value_counts())
+print("Model saved successfully!")
