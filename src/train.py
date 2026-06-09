@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
+from sklearn.metrics import classification_report
 
 df = pd.read_csv("data/churn.csv")
 
@@ -45,6 +46,12 @@ predictions = model.predict(X_test)
 accuracy = accuracy_score(y_test, predictions)
 
 print(f"Accuracy: {accuracy:.4f}")
+
+
+print(classification_report(
+    y_test,
+    predictions
+))
 
 # Save model
 joblib.dump(model, "models/model.pkl")
