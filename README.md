@@ -1,1 +1,1 @@
-PRODUCTION MLOPS PLATFORM - Churn Prediction sys
+PRODUCTION MLOPS PLATFORM - Churn Prediction system
